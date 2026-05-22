@@ -185,7 +185,7 @@ def build_price_matrix(
 
     for i, ticker in enumerate(all_tickers):
         if status_callback:
-            status_callback(i + 1, len(all_tickers), ticker)
+            status_callback(i, len(all_tickers), ticker)
 
         s = fetch_ticker_monthly(ticker, start, end)
 
