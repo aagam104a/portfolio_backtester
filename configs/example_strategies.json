@@ -1,0 +1,77 @@
+{
+  "strategies": [
+    {
+      "name": "India-Heavy Portfolio",
+      "description": "Concentrated in Indian equity markets with a small global hedge",
+      "allocations": {
+        "^NSEI": 40,
+        "^BSESN": 20,
+        "NIFTYNXT50.NS": 15,
+        "NIFTYMIDCAP150.NS": 10,
+        "GLD": 10,
+        "SPY": 5
+      }
+    },
+    {
+      "name": "US-Heavy Portfolio",
+      "description": "Concentrated in US equities, S&P500 + Nasdaq + blue chips",
+      "allocations": {
+        "SPY": 40,
+        "QQQ": 30,
+        "DIA": 10,
+        "GLD": 10,
+        "^NSEI": 10
+      }
+    },
+    {
+      "name": "Equal Global Portfolio",
+      "description": "Balanced across Indian, US, commodities, and global ETFs",
+      "allocations": {
+        "^NSEI": 20,
+        "SPY": 20,
+        "QQQ": 15,
+        "GLD": 15,
+        "SLV": 10,
+        "NIFTYMIDCAP150.NS": 10,
+        "MSFT": 10
+      }
+    },
+    {
+      "name": "AI & Semiconductor Heavy",
+      "description": "High-growth tech, AI, GPU, semiconductor focus",
+      "allocations": {
+        "NVDA": 20,
+        "AMD": 10,
+        "SOXX": 15,
+        "SMH": 10,
+        "MSFT": 10,
+        "GOOGL": 10,
+        "AVGO": 10,
+        "TSM": 10,
+        "MU": 5
+      }
+    },
+    {
+      "name": "Gold/Silver Hedge Portfolio",
+      "description": "Commodity-heavy portfolio with precious metals as inflation hedge",
+      "allocations": {
+        "GLD": 40,
+        "SLV": 20,
+        "^NSEI": 20,
+        "SPY": 20
+      }
+    },
+    {
+      "name": "Conservative Balanced Portfolio",
+      "description": "Low-volatility mix of blue chips, gold, and Indian equities",
+      "allocations": {
+        "SPY": 25,
+        "^NSEI": 25,
+        "GLD": 20,
+        "MSFT": 10,
+        "AAPL": 10,
+        "SLV": 10
+      }
+    }
+  ]
+}
