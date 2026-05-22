@@ -123,16 +123,25 @@ def sidebar() -> dict:
             step=500,
         )
 
-        sip_start = st.date_input(
-            "SIP Start Month",
-            value=date(2026, 7, 1),
-            help="Only relevant for future SIP projections. Backtest uses historical data.",
+        st.subheader("📅 Backtest Date Range")
+
+        start_date = st.date_input(
+            "Backtest Start Month",
+            value=date(2022, 1, 1),
+            help="Simulation starts from this month. Monthly prices are aligned to month-end.",
         )
 
-        backtest_years = st.slider("Backtest Period (years)", 1, 15, 10)
+        end_date = st.date_input(
+            "Backtest End Month",
+            value=date.today(),
+            help="Simulation ends at this month. Use a past month-end for cleaner historical tests.",
+        )
 
-        end_date = date.today()
-        start_date = date(end_date.year - backtest_years, end_date.month, 1)
+        start_date = date(start_date.year, start_date.month, 1)
+        end_date = date(end_date.year, end_date.month, 1)
+
+        if start_date >= end_date:
+            st.error("Backtest Start Month must be before Backtest End Month.")
 
         st.subheader("⚖️ Rebalancing")
         rebalance = st.selectbox(
@@ -175,7 +184,6 @@ def sidebar() -> dict:
     return {
         "monthly_sip": monthly_sip,
         "sip_start": sip_start,
-        "backtest_years": backtest_years,
         "start_date": start_date,
         "end_date": end_date,
         "rebalance": rebalance,
