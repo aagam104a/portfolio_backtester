@@ -183,7 +183,6 @@ def sidebar() -> dict:
 
     return {
         "monthly_sip": monthly_sip,
-        "sip_start": sip_start,
         "start_date": start_date,
         "end_date": end_date,
         "rebalance": rebalance,
