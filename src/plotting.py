@@ -200,38 +200,64 @@ def asset_lines_chart(
 
 # ── Monthly Returns Heatmap ───────────────────────────────────────────────────
 
-def monthly_returns_heatmap(portfolio_values: pd.Series) -> go.Figure:
-    rets = portfolio_values.pct_change().dropna() * 100
-    df = pd.DataFrame(
-        {
-            "year": rets.index.year,
-            "month": rets.index.month,
-            "return": rets.values,
-        }
-    )
-    pivot = df.pivot_table(index="year", columns="month", values="return", aggfunc="mean")
-    month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    pivot.columns = [month_names[m - 1] for m in pivot.columns]
+def monthly_returns_heatmap(portfolio_values):
+    import pandas as pd
+    import plotly.express as px
 
-    fig = go.Figure(
-        data=go.Heatmap(
-            z=pivot.values,
-            x=pivot.columns.tolist(),
-            y=pivot.index.tolist(),
-            colorscale="RdYlGn",
-            colorbar=dict(title="Return (%)"),
-            text=np.round(pivot.values, 1),
-            texttemplate="%{text}%",
-        )
+    pv = portfolio_values.copy()
+    pv.index = pd.to_datetime(pv.index)
+    pv = pv.sort_index()
+    pv = pv.dropna()
+
+    # Correct monthly returns
+    monthly_returns = pv.pct_change()
+
+    # Remove first month because it has no previous month to compare against
+    monthly_returns = monthly_returns.dropna()
+
+    heatmap_df = pd.DataFrame({
+        "Year": monthly_returns.index.year,
+        "Month": monthly_returns.index.month,
+        "Return": monthly_returns.values * 100,
+    })
+
+    month_names = {
+        1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr",
+        5: "May", 6: "Jun", 7: "Jul", 8: "Aug",
+        9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec",
+    }
+
+    heatmap_df["Month Name"] = heatmap_df["Month"].map(month_names)
+
+    pivot = heatmap_df.pivot(
+        index="Year",
+        columns="Month Name",
+        values="Return",
     )
-    fig.update_layout(
+
+    month_order = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    ]
+
+    pivot = pivot.reindex(columns=month_order)
+
+    fig = px.imshow(
+        pivot,
+        text_auto=".1f",
+        aspect="auto",
+        color_continuous_scale="RdYlGn",
         title="Monthly Returns Heatmap (%)",
+        labels=dict(color="Return (%)"),
+    )
+
+    fig.update_layout(
         xaxis_title="Month",
         yaxis_title="Year",
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
     )
+
     return fig
 
 
