@@ -506,7 +506,10 @@ def backtest_section(settings: dict, allocations: dict, expense_ratios: dict) ->
             )
 
     with tab5:
-        fig = monthly_returns_heatmap(result.portfolio_values)
+        fig = monthly_returns_heatmap(
+            result.portfolio_values,
+            result.monthly_invested,
+        )
         st.plotly_chart(
             fig,
             use_container_width=True,
