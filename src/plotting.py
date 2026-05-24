@@ -200,19 +200,26 @@ def asset_lines_chart(
 
 # ── Monthly Returns Heatmap ───────────────────────────────────────────────────
 
-def monthly_returns_heatmap(portfolio_values):
+def monthly_returns_heatmap(portfolio_values, monthly_invested=None):
     import pandas as pd
     import plotly.express as px
 
     pv = portfolio_values.copy()
     pv.index = pd.to_datetime(pv.index)
-    pv = pv.sort_index()
-    pv = pv.dropna()
+    pv = pv.sort_index().dropna()
 
-    # Correct monthly returns
-    monthly_returns = pv.pct_change()
+    if monthly_invested is not None:
+        cashflows = monthly_invested.copy()
+        cashflows.index = pd.to_datetime(cashflows.index)
+        cashflows = cashflows.reindex(pv.index).fillna(0)
 
-    # Remove first month because it has no previous month to compare against
+        # Investment-adjusted monthly return:
+        # removes new SIP contribution from the return calculation
+        monthly_returns = (pv - pv.shift(1) - cashflows) / pv.shift(1)
+    else:
+        monthly_returns = pv.pct_change()
+
+    monthly_returns = monthly_returns.replace([float("inf"), float("-inf")], pd.NA)
     monthly_returns = monthly_returns.dropna()
 
     heatmap_df = pd.DataFrame({
